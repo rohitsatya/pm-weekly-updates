@@ -325,7 +325,7 @@ export default function WeeklyUpdates() {
 
   // Set document title and fetch updates/comments on mount
   useEffect(() => {
-    document.title = "Communications Pod - Weekly Updates";
+    document.title = "Weekly Updates";
     fetchWeeklyUpdates().then(x => {
       setUpdates(x);
       if (x && x.length > 0) {
