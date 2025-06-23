@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import dynamic from 'next/dynamic'
+import 'react-quill/dist/quill.snow.css'
 
 export const metadata: Metadata = {
   title: 'Weekly Pod Updates',

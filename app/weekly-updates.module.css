@@ -1,0 +1,5 @@
+.wmde-markdown ul,
+.wmde-markdown ol {
+  list-style: initial !important;
+  
+} 

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import type React from "react"
 
@@ -51,6 +51,14 @@ import {
   MessageSquare
 } from "lucide-react"
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from "@/components/ui/dropdown-menu"
+import dynamic from 'next/dynamic'
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
+import styles from './weekly-updates.module.css';
+import Image from 'next/image';
+
+const MDPreview = dynamic(() => import('@uiw/react-md-editor').then(mod => mod.default.Markdown), { ssr: false })
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), { ssr: false })
 
 // Mock team members for mentions
 const teamMembers = [
@@ -701,7 +709,10 @@ export default function WeeklyUpdates() {
         <div className="mb-6 sm:mb-8">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-              <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Communications Pod - Weekly Updates</h1>
+              <div className="flex items-center gap-3">
+                <Image src="/comms pod.png" alt="Comms Pod Logo" width={40} height={40} className="rounded" priority />
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Communications Pod - Weekly Updates</h1>
+              </div>
               {/* <p className="text-gray-600 text-sm sm:text-base">
                 Create and manage weekly progress updates for your team
               </p> */}
@@ -781,15 +792,8 @@ export default function WeeklyUpdates() {
               {/* Highlights */}
               <div className="space-y-2">
                 <Label htmlFor="highlights">🔥 Highlights</Label>
-                <Textarea
-                  ref={el => { textareaRefs.current.highlights = el; }}
-                  id="highlights"
-                  placeholder="What were the key wins and accomplishments this week?"
-                  value={formData.highlights}
-                  onChange={(e) => handleTextareaChange("highlights", e.target.value, e)}
-                  rows={3}
-                  className="resize-none px-3 py-2 focus:outline-none"
-                />
+                <MDEditor value={formData.highlights} onChange={val => setFormData(prev => ({ ...prev, highlights: val || '' }))} />
+                <MDPreview source={formData.highlights} className={styles['wmde-markdown']} />
               </div>
               {/* Metrics */}
               <div className="space-y-2">
@@ -823,84 +827,38 @@ export default function WeeklyUpdates() {
               {/* Blockers */}
               <div className="space-y-2">
                 <Label htmlFor="blockers">🚧 Blockers & Risks</Label>
-                <Textarea
-                  ref={el => { textareaRefs.current.blockers = el; }}
-                  id="blockers"
-                  placeholder="What's blocking progress or creating risk?"
-                  value={formData.blockers}
-                  onChange={(e) => handleTextareaChange("blockers", e.target.value, e)}
-                  rows={3}
-                  className="resize-none px-3 py-2 focus:outline-none"
-                />
+                <MDEditor value={formData.blockers} onChange={val => setFormData(prev => ({ ...prev, blockers: val || '' }))} />
+                <MDPreview source={formData.blockers} className={styles['wmde-markdown']} />
               </div>
               {/* Key Focus */}
               <div className="space-y-2">
                 <Label htmlFor="key-focus">🎯 Key Focus</Label>
-                <Textarea
-                  ref={el => { textareaRefs.current.keyFocus = el; }}
-                  id="key-focus"
-                  placeholder="What are the main priorities and focus areas?"
-                  value={formData.keyFocus}
-                  onChange={(e) => handleTextareaChange("keyFocus", e.target.value, e)}
-                  rows={3}
-                  className="resize-none px-3 py-2 focus:outline-none"
-                />
+                <MDEditor value={formData.keyFocus} onChange={val => setFormData(prev => ({ ...prev, keyFocus: val || '' }))} />
+                <MDPreview source={formData.keyFocus} className={styles['wmde-markdown']} />
               </div>
               {/* Other Things in Progress */}
               <div className="space-y-2">
                 <Label htmlFor="other-progress">⚙️ Other Things in Progress</Label>
-                <Textarea
-                  ref={el => { textareaRefs.current.otherProgress = el; }}
-                  id="other-progress"
-                  placeholder="What other work is ongoing or in progress?"
-                  value={formData.otherProgress}
-                  onChange={(e) => handleTextareaChange("otherProgress", e.target.value, e)}
-                  rows={3}
-                  className="resize-none px-3 py-2 focus:outline-none"
-                />
+                <MDEditor value={formData.otherProgress} onChange={val => setFormData(prev => ({ ...prev, otherProgress: val || '' }))} />
+                <MDPreview source={formData.otherProgress} className={styles['wmde-markdown']} />
               </div>
               {/* Upcoming Projects */}
               <div className="space-y-2">
                 <Label htmlFor="upcoming-projects">🚀 Upcoming Projects</Label>
-                <Textarea
-                  ref={el => { textareaRefs.current.upcomingProjects = el; }}
-                  id="upcoming-projects"
-                  placeholder="What projects are coming up or being planned?"
-                  value={formData.upcomingProjects}
-                  onChange={(e) => handleTextareaChange("upcomingProjects", e.target.value, e)}
-                  rows={3}
-                  className="resize-none px-3 py-2 focus:outline-none"
-                />
+                <MDEditor value={formData.upcomingProjects} onChange={val => setFormData(prev => ({ ...prev, upcomingProjects: val || '' }))} />
+                <MDPreview source={formData.upcomingProjects} className={styles['wmde-markdown']} />
               </div>
               {/* Shoutouts */}
               <div className="space-y-2">
                 <Label htmlFor="shoutouts">👏 Shoutouts</Label>
-                <Textarea
-                  ref={el => { textareaRefs.current.shoutouts = el; }}
-                  id="shoutouts"
-                  placeholder="Recognize team members and great work (use @username to mention)"
-                  value={formData.shoutouts}
-                  onChange={(e) => handleTextareaChange("shoutouts", e.target.value, e)}
-                  rows={2}
-                  className="resize-none px-3 py-2 focus:outline-none"
-                />
-                <p className="text-xs text-gray-500">
-                  <AtSign className="w-3 h-3 inline mr-1" />
-                  Type @ to mention team members
-                </p>
+                <MDEditor value={formData.shoutouts} onChange={val => setFormData(prev => ({ ...prev, shoutouts: val || '' }))} />
+                <MDPreview source={formData.shoutouts} className={styles['wmde-markdown']} />
               </div>
               {/* Miscellaneous */}
               <div className="space-y-2">
                 <Label htmlFor="miscellaneous">📝 Miscellaneous</Label>
-                <Textarea
-                  ref={el => { textareaRefs.current.miscellaneous = el; }}
-                  id="miscellaneous"
-                  placeholder="Any other updates, notes, or information to share"
-                  value={formData.miscellaneous}
-                  onChange={(e) => handleTextareaChange("miscellaneous", e.target.value, e)}
-                  rows={3}
-                  className="resize-none px-3 py-2 focus:outline-none"
-                />
+                <MDEditor value={formData.miscellaneous} onChange={val => setFormData(prev => ({ ...prev, miscellaneous: val || '' }))} />
+                <MDPreview source={formData.miscellaneous} className={styles['wmde-markdown']} />
               </div>
               {/* Tags */}
               <div className="space-y-2">
@@ -1112,7 +1070,7 @@ export default function WeeklyUpdates() {
                           <>
                             <div>
                               <h4 className="font-semibold text-sm text-gray-700 mb-2">🔥 Highlights</h4>
-                              <p className="text-gray-900 text-sm sm:text-base">{update.highlights}</p>
+                              <MDPreview source={update.highlights} className={styles['wmde-markdown']} />
                             </div>
                             <Separator />
                           </>
@@ -1145,7 +1103,7 @@ export default function WeeklyUpdates() {
                           <>
                             <div>
                               <h4 className="font-semibold text-sm text-gray-700 mb-2">🚧 Blockers & Risks</h4>
-                              <p className="text-gray-900 text-sm sm:text-base">{update.blockers}</p>
+                              <MDPreview source={update.blockers} className={styles['wmde-markdown']} />
                             </div>
                             <Separator />
                           </>
@@ -1156,7 +1114,7 @@ export default function WeeklyUpdates() {
                           <>
                             <div>
                               <h4 className="font-semibold text-sm text-gray-700 mb-2">🎯 Key Focus</h4>
-                              <p className="text-gray-900 text-sm sm:text-base">{update.key_focus}</p>
+                              <MDPreview source={update.key_focus} className={styles['wmde-markdown']} />
                             </div>
                             <Separator />
                           </>
@@ -1167,7 +1125,7 @@ export default function WeeklyUpdates() {
                           <>
                             <div>
                               <h4 className="font-semibold text-sm text-gray-700 mb-2">⚙️ Other Things in Progress</h4>
-                              <p className="text-gray-900 text-sm sm:text-base">{update.other_progress}</p>
+                              <MDPreview source={update.other_progress} className={styles['wmde-markdown']} />
                             </div>
                             <Separator />
                           </>
@@ -1178,7 +1136,7 @@ export default function WeeklyUpdates() {
                           <>
                             <div>
                               <h4 className="font-semibold text-sm text-gray-700 mb-2">🚀 Upcoming Projects</h4>
-                              <p className="text-gray-900 text-sm sm:text-base">{update.upcoming}</p>
+                              <MDPreview source={update.upcoming} className={styles['wmde-markdown']} />
                             </div>
                             <Separator />
                           </>
@@ -1189,7 +1147,7 @@ export default function WeeklyUpdates() {
                           <>
                             <div>
                               <h4 className="font-semibold text-sm text-gray-700 mb-2">👏 Shoutouts</h4>
-                              <p className="text-gray-900 text-sm sm:text-base">{update.shoutouts}</p>
+                              <MDPreview source={update.shoutouts} className={styles['wmde-markdown']} />
                             </div>
                             <Separator />
                           </>
@@ -1200,7 +1158,7 @@ export default function WeeklyUpdates() {
                           <>
                             <div>
                               <h4 className="font-semibold text-sm text-gray-700 mb-2">📝 Miscellaneous</h4>
-                              <p className="text-gray-900 text-sm sm:text-base">{update.misc}</p>
+                              <MDPreview source={update.misc} className={styles['wmde-markdown']} />
                             </div>
                             <Separator />
                           </>
